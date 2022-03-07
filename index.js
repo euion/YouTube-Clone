@@ -9,7 +9,7 @@ const { User } = require("./models/User");
 
 
 
-// application/ x-www-form-urlencoded 데이터를 분석하여가져올수 있게 함
+// application/ x-www-form-urlencoded 데이터를 분석하여 가져올 수 있게 함
 app.use(bodyParser.urlencoded({extended:true}));
 // application/json 데이터를 분석하여 가져옴
 app.use(bodyParser.json());
@@ -22,9 +22,9 @@ mongoose.connect(config.mongoURI).then(() =>console.log('mongoDB Connected...'))
 
 
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => 
   res.send('Hello World!')
-})
+)
 
 app.post('/register',(req, res)=>{
     // 회원가입 할때 필요한 정보들을 client에서 가져오면
@@ -40,6 +40,6 @@ app.post('/register',(req, res)=>{
     })
 })
 
-app.listen(port, () => {
+app.listen(port, () => 
   console.log(`Example app listening on port ${port}!`)
-})
+)
