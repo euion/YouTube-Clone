@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { JsonWebTokenError } = require('jsonwebtoken');
 const saltRounds=10 //salt를 이용해서 비밀번호를 암호화 해야 함
+const { JsonWebTokenError } = require('jsonwebtoken');
 const jwt = require('jsonwebtoken');
 
 //유저모델
