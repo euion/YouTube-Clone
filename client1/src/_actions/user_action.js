@@ -3,7 +3,7 @@ import { LOGIN_USER, REGISTER_USER } from "./types";
 
 export function loginUser(dataToSubmit) {
   const request = axios
-    .post("https://localhost:5000/api/users/login", dataToSubmit) // 서버에서 받은 데이터를 request에 저장
+    .post("/api/users/login", dataToSubmit) // 서버에서 받은 데이터를 request에 저장
     .then((response) => response.data);
 
   return {

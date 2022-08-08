@@ -3,10 +3,11 @@ import Axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../_actions/user_action";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage(props) {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
 
@@ -19,7 +20,7 @@ function LoginPage(props) {
   };
 
   const onsubmitHandler = (event) => {
-    event.preventDefault(); // submit을 누른다고 refrash
+    event.preventDefault(); // submit을 누른다고 refrash되는 것을 방지
 
     console.log("Email", Email);
     console.log("password", Password);
@@ -31,7 +32,7 @@ function LoginPage(props) {
 
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.loginSuccess) {
-        props.history.push("/");
+        navigate("/");
       } else {
         alert("Error");
       }
