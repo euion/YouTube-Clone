@@ -59,19 +59,27 @@ function VideoUploadPage() {
           .then((data) => {
             console.log(data);
             let variable = {
-              url: data.url,
+              url: data.filePath,
               fileName: data.fileName,
             };
+            // setFilePath(data.filePath);
             fetch("/api/video/thumbnail", {
               method: "POST",
-              variable,
+              headers: {
+                "Content-Type": "application/json",
+              },
+
+              body: JSON.stringify(variable),
             }).then((response) => {
-              response
-                .json()
-                .then((data) => {
-                  console.log(data);
-                })
-                .catch(alert("썸네일 생성에 실패하였습니다."));
+              setDuration(response.data.fileDuration);
+              setThumbnailPath(response.data.filePath);
+              alert("저장완료");
+              // if (response.data.success) {
+
+              // } else {
+              //   alert("썸네일 생성에 실패하였습니다.");
+              // }
+              console.log(response);
             });
           })
           .catch((error) => {
@@ -114,14 +122,14 @@ function VideoUploadPage() {
             </Dropzone>
             {/* 썸네일 */}
 
-            {/* {ThumbnailPath && (
-            <div>
-              <img
-                src={`http://localhost:5000/${ThumbnailPath}`}
-                alt="Thumbnail"
-              />
-            </div>
-          )} */}
+            {ThumbnailPath && (
+              <div>
+                <img
+                  src={`http://localhost:5000/${ThumbnailPath}`}
+                  alt="thumbnail"
+                />
+              </div>
+            )}
           </div>
           <br />
           <br />

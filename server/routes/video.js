@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-var ffmpeg = require("fluent-ffmpeg");
+const ffmpeg = require("fluent-ffmpeg");
 
 const { Video } = require("../models/Video");
 const { Subscriber } = require("../models/Subscriber");
@@ -57,8 +57,9 @@ router.post("/thumbnail", (req, res) => {
   let filePath = "";
   let fileDuration = "";
 
+  // ffmpeg.setFfmpegPath("C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe");
   //비디오 정보 가져오기
-  ffmpeg.ffprobe(req.body.rul, function (err, metadata) {
+  ffmpeg.ffprobe(req.body.url, function (err, metadata) {
     console.dir(metadata);
     console.log(metadata.format.duration);
     fileDuration = metadata.format.duration;
@@ -67,7 +68,8 @@ router.post("/thumbnail", (req, res) => {
   //썸네일 생성
   ffmpeg(req.body.url) // 클라이언트에서 온 비디오 저장 경로
     .on("filenames", function (filenames) {
-      console.log("Will generate" + filenames.josin(", "));
+      console.log(req.body);
+      console.log("Will generate " + filenames.join(", "));
       console.log(filenames);
 
       filePath = "uploads/thumbnails/" + filenames[0];
@@ -76,19 +78,15 @@ router.post("/thumbnail", (req, res) => {
       console.log("썸네일 생성");
       return res.json({
         success: true,
-        url: filePath,
+        filePath: filePath,
         fileDuration: fileDuration,
       });
     })
-    .on("error", function (err) {
-      console.error(err);
-      return res.json({ success: false, err });
-    })
     .screenshots({
-      count: 3,
-      folder: "uploads/thumnails",
+      count: 3, //1개의 썸네일 생성
+      folder: "uploads/thumbnails",
       size: "320x240",
-      filename: "thumbnail-%b.png", // file 원래 이름 저장
+      fileName: "thumbnail-%b.png", // file 원래 이름 저장
     });
 });
 
