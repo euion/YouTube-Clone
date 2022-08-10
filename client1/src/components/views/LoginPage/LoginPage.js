@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../../_actions/user_action";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 import { useNavigate } from "react-router-dom";
+import { Form, FormGroup, Col, FormControl, Button } from "react-bootstrap";
 
 function LoginPage(props) {
   const dispatch = useDispatch();
@@ -46,10 +47,43 @@ function LoginPage(props) {
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        height: "100vh",
+        height: "80vh",
       }}
     >
-      <form
+      <Form horizontal onSubmit={onsubmitHandler}>
+        <Form.Group controlId="formHorizontalEmail">
+          <Col sm={2}>Email</Col>
+          <Col sm={10}>
+            <FormControl
+              type="email"
+              value={Email}
+              onChange={onEmailHandler}
+              placeholder="Email"
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group controlId="formHorizontalPassword">
+          <Col sm={2}>Password</Col>
+          <Col sm={10}>
+            <FormControl
+              type="password"
+              value={Password}
+              onChange={onPasswordHandler}
+              placeholder="Password"
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group>
+          <br></br>
+        </Form.Group>
+        <Form.Group>
+          <Col smOffset={2} sm={10}>
+            <Button type="submit">Sign in</Button>
+          </Col>
+        </Form.Group>
+      </Form>
+      {/* <form
         style={{ display: "flex", flexDirection: "column" }}
         onSubmit={onsubmitHandler}
       >
@@ -61,7 +95,7 @@ function LoginPage(props) {
         <br />
 
         <button>제출하기</button>
-      </form>
+      </form> */}
     </div>
   );
 }
