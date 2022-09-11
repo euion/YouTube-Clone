@@ -51,6 +51,15 @@ router.post("/uploadfiles", (req, res) => {
   });
 });
 
+router.post("/uploadVideo", (req, res) => {
+  // 비디오 정보들을 저장
+  const video = new Video(req.body); // 클라이언트에서 받아온 req를 저장함
+  video.save((err, doc) => {
+    if (err) return res.json({ success: false, err });
+    res.status(200).json({ success: true });
+  });
+});
+
 router.post("/thumbnail", (req, res) => {
   //썸네일 생성하고 비디오 러닝타임도 가져오기
 
@@ -78,12 +87,16 @@ router.post("/thumbnail", (req, res) => {
       console.log("썸네일 생성");
       return res.json({
         success: true,
-        filePath: filePath,
+        url: filePath,
         fileDuration: fileDuration,
       });
     })
+    .on("error", function (err) {
+      console.log(err);
+      return res.json({ success: false, err });
+    })
     .screenshots({
-      count: 3, //1개의 썸네일 생성
+      count: 3, //3개의 썸네일 생성
       folder: "uploads/thumbnails",
       size: "320x240",
       fileName: "thumbnail-%b.png", // file 원래 이름 저장

@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Typography, Button, Form, message, Input } from "antd";
-import { VerticalAlignTopOutlined } from "@ant-design/icons";
+import {
+  PropertySafetyFilled,
+  VerticalAlignTopOutlined,
+} from "@ant-design/icons";
 import Dropzone from "react-dropzone";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -19,7 +24,9 @@ const CategoryOption = [
   { value: 4, label: "Sports" },
 ];
 
-function VideoUploadPage() {
+function VideoUploadPage(props) {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
   const [VideoTitle, setVideoTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Private, setPrivate] = useState(0);
@@ -52,6 +59,7 @@ function VideoUploadPage() {
 
     formData.append("file", files[0]);
     console.log(formData);
+
     fetch("/api/video/uploadfiles", { method: "POST", body: formData }).then(
       (response) =>
         response
@@ -62,25 +70,27 @@ function VideoUploadPage() {
               url: data.filePath,
               fileName: data.fileName,
             };
-            // setFilePath(data.filePath);
+            setFilePath(data.filePath);
             fetch("/api/video/thumbnail", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-
               body: JSON.stringify(variable),
-            }).then((response) => {
-              setDuration(response.data.fileDuration);
-              setThumbnailPath(response.data.filePath);
-              alert("저장완료");
-              // if (response.data.success) {
-
-              // } else {
-              //   alert("썸네일 생성에 실패하였습니다.");
-              // }
-              console.log(response);
-            });
+            }).then((response) =>
+              response.json().then((data) => {
+                console.log(data);
+                if (data.success) {
+                  console.log(data.url);
+                  setDuration(data.fileDuration);
+                  setThumbnailPath(data.url);
+                  alert("저장완료");
+                } else {
+                  alert("썸네일 생성에 실패하였습니다.");
+                }
+                console.log(response);
+              })
+            );
           })
           .catch((error) => {
             console.error(error);
@@ -88,7 +98,37 @@ function VideoUploadPage() {
           })
     );
   };
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const variables = {
+      writer: user.userData,
+      title: VideoTitle,
+      description: Description,
+      privacy: Private,
+      filePath: FilePath,
+      category: Category,
+      duration: Duration,
+      thumbnail: ThumbnailPath,
+    };
+    fetch("/api/video/uploadVideo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(variables),
+    }).then((response) =>
+      response.json().then((data) => {
+        if (data.success) {
+          console.log(data);
+          message.success("업로드에 성공하였습니다");
+          setTimeout(() => {
+            navigate("/");
+          }, 3000);
+        } else {
+          alert("비디오 업로드에 실패했습니다.");
+        }
+      })
+    );
     console.log("submit");
   };
   return (
@@ -98,7 +138,7 @@ function VideoUploadPage() {
           <Title level={2}>Upload Video</Title>
         </div>
 
-        <Form onSubmit>
+        <Form onSubmit={onSubmit}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             {/* Drop Zone */}
 
