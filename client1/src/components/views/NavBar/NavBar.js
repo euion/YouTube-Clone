@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import LeftMenu from "./LeftMenu";
-import RightMenu from "./RightMenu";
-import { Drawer, Button, Icon } from "antd";
-import "./NavBar.css";
+import LeftMenu from "./Sections/LeftMenu";
+import RightMenu from "./Sections/RightMenu";
+import { Drawer, Button } from "antd";
+import { FolderAddOutlined } from "@ant-design/icons";
+
+import "./Sections/Navbar.css";
+import Logo from "./다운로드.png";
 
 function NavBar() {
   const [visible, setVisible] = useState(false);
@@ -18,15 +21,15 @@ function NavBar() {
   return (
     <nav
       className="menu"
-      style={{ position: "fixed", zIndex: 99, width: "100%", top: 0 }}
+      style={{ position: "fixed", zIndex: 1, width: "100%" }}
     >
       <div className="menu__logo">
         <a href="/">
-          {/* <img
+          <img
             src={Logo}
             alt="Logo"
             style={{ width: "100%", marginTop: "-5px" }}
-          /> */}
+          />
         </a>
       </div>
       <div className="menu__container">
@@ -40,7 +43,9 @@ function NavBar() {
           className="menu__mobile-button"
           type="primary"
           onClick={showDrawer}
-        ></Button>
+        >
+          <FolderAddOutlined type="align-right" />
+        </Button>
         <Drawer
           title="Basic Drawer"
           placement="right"

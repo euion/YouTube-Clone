@@ -20,7 +20,7 @@ function App() {
       <div>
         <NavBar />
       </div>
-      <div>
+      <div style={{ marginTop: "100px" }}>
         <Routes>
           <Route path="/" element={<AuthLandingPage />} />
           <Route path="/login" element={<AuthLoginPage />} />
